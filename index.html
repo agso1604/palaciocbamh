@@ -72,10 +72,10 @@
 <body class="bg-parchment text-espresso font-sans antialiased selection:bg-terracotta selection:text-white">
 
   <!-- =====================================================================
-       1. BARRA DE NAVEGACIÓN PEGAJOSA + MODO EDICIÓN DE FOTOS
+       1. BARRA DE NAVEGACIÓN PEGAJOSA
        ===================================================================== -->
   <header class="sticky top-0 z-40 bg-parchment/95 backdrop-blur-md border-b border-espresso/10 shadow-xs">
-    <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
+    <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-center">
       <!-- Chips rápidos para móvil -->
       <nav aria-label="Navegación rápida" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
         <a href="#bienvenida" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">🏛️ Inicio</a>
@@ -86,24 +86,12 @@
         <a href="#trivia" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">🧠 Trivia</a>
         <a href="#despedida" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">❤️ Cierre</a>
       </nav>
-
-      <!-- Botón discreto para activar/desactivar Modo Edición de Fotos -->
-      <button
-        type="button"
-        id="toggleEditModeBtn"
-        aria-pressed="false"
-        title="Activar o desactivar botones para subir fotos"
-        class="shrink-0 px-2.5 py-1.5 rounded-full text-[11px] font-semibold border border-espresso/20 bg-white text-espresso hover:bg-creamSoft transition flex items-center gap-1"
-      >
-        <span>📷</span>
-        <span id="editModeLabel" class="hidden sm:inline">Editar fotos</span>
-      </button>
     </div>
   </header>
 
   <main>
     <!-- =====================================================================
-         SECCIÓN 1: BIENVENIDA (PORTADA - FOTO 5: portada.jpg)
+         SECCIÓN 1: BIENVENIDA (PORTADA - portada.jpg)
          ===================================================================== -->
     <section id="bienvenida" class="bg-gradient-to-b from-espresso via-roast to-[#653F27] text-parchment pt-8 pb-12 sm:pt-12 sm:pb-16 px-4">
       <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
@@ -133,19 +121,19 @@
           </div>
         </div>
 
-        <!-- Marco de Portada para Foto 5 (portada.jpg) + Arte Vectorial de Respaldo -->
+        <!-- Marco de Portada (portada.jpg) + Arte Vectorial de Respaldo -->
         <div class="lg:col-span-6">
           <div class="bg-parchment text-espresso rounded-3xl p-3.5 sm:p-4 shadow-2xl border border-goldWarm/40">
-            <div class="relative rounded-2xl overflow-hidden bg-creamSoft aspect-[16/10] flex items-center justify-center border border-espresso/10">
-              <!-- Imagen real (portada.jpg o subida desde galería) -->
+            <button type="button" data-lightbox-slot="portada" class="relative rounded-2xl overflow-hidden bg-creamSoft aspect-[16/10] w-full flex items-center justify-center border border-espresso/10 group text-left">
+              <!-- Imagen real del repositorio -->
               <img
                 id="img-portada"
                 src="portada.jpg"
                 alt="Fachada frontal del Palacio Municipal de Córdoba"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
 
-              <!-- Respaldo vectorial neoclásico elegante si portada.jpg no existe aún -->
+              <!-- Respaldo vectorial neoclásico si portada.jpg no carga -->
               <div id="fallback-portada" class="hidden w-full h-full">
                 <svg viewBox="0 0 640 400" class="w-full h-full object-cover" role="img" aria-label="Ilustración neoclásica del Palacio Municipal de Córdoba">
                   <defs>
@@ -156,17 +144,14 @@
                   </defs>
                   <rect width="640" height="400" fill="url(#skyWarm)" />
                   <rect x="0" y="346" width="640" height="54" fill="#3B2314" />
-                  <!-- Fachada estilo azul/gris neoclásico -->
                   <rect x="48" y="130" width="544" height="216" fill="#7D91A6" stroke="#3B2314" stroke-width="2" />
                   <rect x="42" y="120" width="556" height="12" fill="#FAF6F0" />
                   <rect x="48" y="232" width="544" height="8" fill="#FAF6F0" />
-                  <!-- Frontón central y reloj -->
                   <polygon points="242,120 320,68 398,120" fill="#FAF6F0" stroke="#52321E" stroke-width="2" />
                   <rect x="282" y="90" width="76" height="30" fill="#7D91A6" stroke="#FAF6F0" stroke-width="2" />
                   <circle cx="320" cy="105" r="11" fill="#FAF6F0" stroke="#3B2314" stroke-width="2" />
                   <line x1="320" y1="105" x2="320" y2="98" stroke="#3B2314" stroke-width="1.5" />
                   <line x1="320" y1="105" x2="326" y2="105" stroke="#3B2314" stroke-width="1.5" />
-                  <!-- Arcos inferiores y ventanales -->
                   <g fill="#2E3B47">
                     <path d="M70 346 V270 A14 14 0 0 1 98 270 V346 Z" />
                     <path d="M112 346 V270 A14 14 0 0 1 140 270 V346 Z" />
@@ -197,15 +182,14 @@
                   </g>
                 </svg>
               </div>
-            </div>
+            </button>
 
-            <!-- Pie de portada + botón rápido de carga -->
-            <div class="mt-2.5 flex items-center justify-between gap-2 text-xs">
+            <!-- Pie de portada limpio -->
+            <div class="mt-2.5 flex items-center justify-between gap-2 text-xs px-1">
               <span class="font-medium text-roast truncate">Fachada principal • 21 arcos y reloj</span>
-              <label class="edit-control inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-espresso font-semibold cursor-pointer transition shrink-0">
-                <span>📷 Cargar foto de portada</span>
-                <input type="file" accept="image/*" data-photo-slot="portada" class="sr-only" />
-              </label>
+              <button type="button" data-lightbox-slot="portada" class="text-coffeeLeaf font-bold hover:underline shrink-0">
+                Ampliar vista
+              </button>
             </div>
           </div>
         </div>
@@ -246,7 +230,7 @@
       <!-- Tarjeta limpia con texto breve de la etapa seleccionada -->
       <div id="stageDisplay" class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border border-espresso/10 mb-8"></div>
 
-      <!-- Comparador / Doble tarjeta visual de Postales Históricas (Foto 1 y Foto 2) -->
+      <!-- Postales Históricas (antigua1.jpg y antigua2.jpg) -->
       <div>
         <h3 class="font-serif text-lg sm:text-xl font-bold text-espresso mb-3 flex items-center gap-2">
           <span>🕰️ Postales Históricas</span>
@@ -268,10 +252,9 @@
                 <h4 class="font-serif font-bold text-base text-espresso">Postal del Parque y Palacio</h4>
                 <p class="text-xs sm:text-sm text-roast/85 mt-0.5">Vista histórica con el kiosco y las cúpulas originales.</p>
               </div>
-              <label class="edit-control self-start inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
-                <span>📷 Cargar Postal 1</span>
-                <input type="file" accept="image/*" data-photo-slot="antigua1" class="sr-only" />
-              </label>
+              <button type="button" data-lightbox-slot="antigua1" class="self-start text-xs font-bold text-coffeeLeaf hover:underline">
+                Ampliar vista
+              </button>
             </div>
           </article>
 
@@ -289,10 +272,9 @@
                 <h4 class="font-serif font-bold text-base text-espresso">Palacio y Pico de Orizaba</h4>
                 <p class="text-xs sm:text-sm text-roast/85 mt-0.5">Panorámica antigua junto al Portal de Zevallos y el volcán.</p>
               </div>
-              <label class="edit-control self-start inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
-                <span>📷 Cargar Postal 2</span>
-                <input type="file" accept="image/*" data-photo-slot="antigua2" class="sr-only" />
-              </label>
+              <button type="button" data-lightbox-slot="antigua2" class="self-start text-xs font-bold text-coffeeLeaf hover:underline">
+                Ampliar vista
+              </button>
             </div>
           </article>
         </div>
@@ -300,7 +282,7 @@
     </section>
 
     <!-- =====================================================================
-         SECCIÓN 3: ARQUITECTURA (4 PESTAÑAS BREVES + FOTO 3: fachada.jpg)
+         SECCIÓN 3: ARQUITECTURA (4 PESTAÑAS BREVES + fachada.jpg)
          ===================================================================== -->
     <section id="arquitectura" class="py-12 sm:py-16 px-4 bg-creamSoft/70 border-y border-espresso/10">
       <div class="max-w-5xl mx-auto">
@@ -333,23 +315,22 @@
           <!-- Tarjeta de contenido de la pestaña -->
           <div id="archDisplay" class="lg:col-span-6 bg-white rounded-3xl p-6 shadow-md border border-espresso/10 flex flex-col justify-center"></div>
 
-          <!-- Tarjeta visual destacada para Foto 3 (fachada.jpg) -->
+          <!-- Tarjeta visual destacada (fachada.jpg) -->
           <div class="lg:col-span-6 bg-white rounded-3xl overflow-hidden shadow-md border border-espresso/10 flex flex-col">
             <button type="button" data-lightbox-slot="fachada" class="relative aspect-[16/10] w-full bg-creamSoft overflow-hidden group text-left">
               <img id="img-fachada" src="fachada.jpg" alt="Perspectiva de los 21 arcos y remate neoclásico" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               <div id="fallback-fachada" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#DCE4D8] to-[#B7C7B2]">
                 <span class="text-3xl mb-1">🏛️</span>
-                <span class="text-xs font-bold text-espresso">Foto 3 • fachada.jpg</span>
+                <span class="text-xs font-bold text-espresso">Fachada • fachada.jpg</span>
               </div>
             </button>
             <div class="p-4 flex items-center justify-between gap-2">
               <p class="text-xs sm:text-sm font-semibold text-espresso">
                 Perspectiva de los 21 arcos y remate neoclásico
               </p>
-              <label class="edit-control shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
-                <span>📷 Cargar</span>
-                <input type="file" accept="image/*" data-photo-slot="fachada" class="sr-only" />
-              </label>
+              <button type="button" data-lightbox-slot="fachada" class="shrink-0 text-xs font-bold text-coffeeLeaf hover:underline">
+                Ampliar vista
+              </button>
             </div>
           </div>
         </div>
@@ -373,7 +354,7 @@
     </section>
 
     <!-- =====================================================================
-         SECCIÓN 5: GALERÍA (4 ESPACIOS CURADOS + LIGHTBOX + CARGA INDIVIDUAL)
+         SECCIÓN 5: GALERÍA (4 ESPACIOS CURADOS + LIGHTBOX)
          ===================================================================== -->
     <section id="galeria" class="py-12 sm:py-16 px-4 bg-creamSoft/70 border-y border-espresso/10">
       <div class="max-w-5xl mx-auto">
@@ -472,10 +453,8 @@
 
   <script>
     /* =========================================================================
-       1. DATOS EXACTOS DE LOS APUNTES Y CONFIGURACIÓN DE FOTOS
+       1. DATOS EXACTOS Y RUTAS FIJAS DEL REPOSITORIO
        ========================================================================= */
-    const STORAGE_KEY = "cordoba_palacio_photos_v1";
-
     const PHOTO_SLOTS = {
       portada: {
         file: "portada.jpg",
@@ -621,21 +600,13 @@
     ];
 
     /* =========================================================================
-       2. GESTIÓN DE FOTOS (LOCALES O SUBIDAS EN LOCALSTORAGE + MODO EDICIÓN)
+       2. CARGA DE IMÁGENES DEL REPOSITORIO
        ========================================================================= */
-    let savedPhotos = {};
-    try {
-      savedPhotos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    } catch (_) {
-      savedPhotos = {};
-    }
-
     function applyPhotoToSlot(slotKey) {
       const imgEl = document.getElementById(`img-${slotKey}`);
       const fallbackEl = document.getElementById(`fallback-${slotKey}`);
       if (!imgEl || !fallbackEl) return;
 
-      const customDataUrl = savedPhotos[slotKey];
       const defaultFile = PHOTO_SLOTS[slotKey]?.file;
 
       imgEl.onload = () => {
@@ -648,50 +619,7 @@
         fallbackEl.classList.remove("hidden");
       };
 
-      imgEl.src = customDataUrl || defaultFile;
-    }
-
-    function bindAllPhotoUploads() {
-      document.querySelectorAll("input[data-photo-slot]").forEach((input) => {
-        input.addEventListener("change", (event) => {
-          const file = event.target.files?.[0];
-          const slot = input.dataset.photoSlot;
-          if (!file || !slot) return;
-
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            if (typeof e.target?.result === "string") {
-              savedPhotos[slot] = e.target.result;
-              try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(savedPhotos));
-              } catch (_) {
-                // Si la imagen es muy pesada para localStorage, se mantiene visible en esta sesión
-              }
-              applyPhotoToSlot(slot);
-            }
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-
-    // Modo Edición de Fotos (permite ocultar botones de carga durante la exposición)
-    let editModeActive = true;
-    function setEditMode(active) {
-      editModeActive = active;
-      const btn = document.getElementById("toggleEditModeBtn");
-      const label = document.getElementById("editModeLabel");
-      if (btn) {
-        btn.setAttribute("aria-pressed", String(active));
-        btn.classList.toggle("bg-terracotta/25", active);
-        btn.classList.toggle("border-terracotta", active);
-      }
-      if (label) {
-        label.textContent = active ? "Edición: ON" : "Editar fotos";
-      }
-      document.querySelectorAll(".edit-control").forEach((el) => {
-        el.classList.toggle("hidden", !active);
-      });
+      imgEl.src = defaultFile;
     }
 
     /* =========================================================================
@@ -796,14 +724,10 @@
               <h3 class="font-serif font-bold text-base text-espresso">${item.title}</h3>
               <p class="text-xs sm:text-sm text-roast/85 mt-0.5">${item.desc}</p>
             </div>
-            <div class="flex items-center justify-between gap-2 pt-1">
+            <div class="pt-1">
               <button type="button" data-lightbox-slot="${item.slot}" class="text-xs font-bold text-coffeeLeaf hover:underline">
                 Ampliar vista
               </button>
-              <label class="edit-control inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
-                <span>📷 Cargar foto</span>
-                <input type="file" accept="image/*" data-photo-slot="${item.slot}" class="sr-only" />
-              </label>
             </div>
           </div>
         </article>
@@ -824,12 +748,11 @@
       title.textContent = info.title;
       desc.textContent = info.desc;
 
-      const src = savedPhotos[slotKey] || info.file;
       media.innerHTML = `
         <img
-          src="${src}"
+          src="${info.file}"
           alt="${info.title}"
-          onerror="this.parentElement.innerHTML='<div class=\\'py-14 px-6 text-center\\'><p class=\\'font-serif font-bold text-lg text-espresso\\'>${info.title}</p><p class=\\'text-xs text-roast mt-1\\'>Carga la imagen <strong>${info.file}</strong> usando el botón de edición.</p></div>'"
+          onerror="this.parentElement.innerHTML='<div class=\\'py-14 px-6 text-center\\'><p class=\\'font-serif font-bold text-lg text-espresso\\'>${info.title}</p><p class=\\'text-xs text-roast mt-1\\'>No se encontró el archivo <strong>${info.file}</strong> en el repositorio.</p></div>'"
           class="w-full max-h-[58vh] object-contain"
         />
       `;
@@ -1002,15 +925,8 @@
       // Galería
       renderGallery();
 
-      // Cargar fotos en los 7 espacios
+      // Cargar las 7 fotos directamente desde el repositorio
       Object.keys(PHOTO_SLOTS).forEach((slot) => applyPhotoToSlot(slot));
-      bindAllPhotoUploads();
-
-      // Botón Modo Edición de Fotos
-      setEditMode(true);
-      document.getElementById("toggleEditModeBtn")?.addEventListener("click", () => {
-        setEditMode(!editModeActive);
-      });
 
       // Lightbox
       document.querySelectorAll("[data-lightbox-slot]").forEach((el) => {
