@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Palacio Municipal de Córdoba | Recorrido Interactivo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: '#FAF6F0',
+            espresso: '#3B2314',
+            roast: '#52321E',
+            terracotta: '#C68B59',
+            goldWarm: '#DFB17B',
+            coffeeLeaf: '#2E4A3E',
+            creamSoft: '#F3ECE1'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes confettiDrop {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(540deg); opacity: 0; }
+    }
+    .confetti-dot {
+      position: fixed;
+      top: -10px;
+      width: 9px;
+      height: 14px;
+      border-radius: 3px;
+      z-index: 90;
+      pointer-events: none;
+      animation: confettiDrop linear forwards;
+    }
+  </style>
+</head>
+<body class="bg-parchment text-espresso font-sans antialiased selection:bg-terracotta selection:text-white">
+
+  <!-- =====================================================================
+       1. BARRA DE NAVEGACIÓN PEGAJOSA + MODO EDICIÓN DE FOTOS
+       ===================================================================== -->
+  <header class="sticky top-0 z-40 bg-parchment/95 backdrop-blur-md border-b border-espresso/10 shadow-xs">
+    <div class="max-w-5xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
+      <!-- Chips rápidos para móvil -->
+      <nav aria-label="Navegación rápida" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+        <a href="#bienvenida" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">🏛️ Inicio</a>
+        <a href="#historia" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">📜 Historia</a>
+        <a href="#arquitectura" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">🏗️ Diseño</a>
+        <a href="#sabias-que" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">💡 Datos</a>
+        <a href="#galeria" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">📸 Fotos</a>
+        <a href="#trivia" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">🧠 Trivia</a>
+        <a href="#despedida" class="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-creamSoft hover:bg-espresso hover:text-parchment transition whitespace-nowrap">❤️ Cierre</a>
+      </nav>
+
+      <!-- Botón discreto para activar/desactivar Modo Edición de Fotos -->
+      <button
+        type="button"
+        id="toggleEditModeBtn"
+        aria-pressed="false"
+        title="Activar o desactivar botones para subir fotos"
+        class="shrink-0 px-2.5 py-1.5 rounded-full text-[11px] font-semibold border border-espresso/20 bg-white text-espresso hover:bg-creamSoft transition flex items-center gap-1"
+      >
+        <span>📷</span>
+        <span id="editModeLabel" class="hidden sm:inline">Editar fotos</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- =====================================================================
+         SECCIÓN 1: BIENVENIDA (PORTADA - FOTO 5: portada.jpg)
+         ===================================================================== -->
+    <section id="bienvenida" class="bg-gradient-to-b from-espresso via-roast to-[#653F27] text-parchment pt-8 pb-12 sm:pt-12 sm:pb-16 px-4">
+      <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
+        <!-- Texto conciso de bienvenida -->
+        <div class="lg:col-span-6 text-center lg:text-left space-y-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-goldWarm text-xs font-semibold">
+            <span>☕</span>
+            <span>Córdoba, Veracruz</span>
+          </span>
+
+          <h1 class="font-serif text-3xl sm:text-5xl font-bold leading-tight">
+            Palacio Municipal de <span class="text-goldWarm italic">Córdoba</span>
+          </h1>
+
+          <p class="text-parchment/90 text-base sm:text-lg leading-relaxed">
+            Historia, arte y tradición en el corazón de Veracruz.
+          </p>
+
+          <div class="pt-1">
+            <a
+              href="#historia"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-terracotta hover:bg-[#b57a49] text-espresso font-bold text-base shadow-lg transition transform hover:-translate-y-0.5"
+            >
+              <span>Comenzar recorrido</span>
+              <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Marco de Portada para Foto 5 (portada.jpg) + Arte Vectorial de Respaldo -->
+        <div class="lg:col-span-6">
+          <div class="bg-parchment text-espresso rounded-3xl p-3.5 sm:p-4 shadow-2xl border border-goldWarm/40">
+            <div class="relative rounded-2xl overflow-hidden bg-creamSoft aspect-[16/10] flex items-center justify-center border border-espresso/10">
+              <!-- Imagen real (portada.jpg o subida desde galería) -->
+              <img
+                id="img-portada"
+                src="portada.jpg"
+                alt="Fachada frontal del Palacio Municipal de Córdoba"
+                class="w-full h-full object-cover"
+              />
+
+              <!-- Respaldo vectorial neoclásico elegante si portada.jpg no existe aún -->
+              <div id="fallback-portada" class="hidden w-full h-full">
+                <svg viewBox="0 0 640 400" class="w-full h-full object-cover" role="img" aria-label="Ilustración neoclásica del Palacio Municipal de Córdoba">
+                  <defs>
+                    <linearGradient id="skyWarm" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#DCE6EE" />
+                      <stop offset="100%" stop-color="#F3ECE1" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="640" height="400" fill="url(#skyWarm)" />
+                  <rect x="0" y="346" width="640" height="54" fill="#3B2314" />
+                  <!-- Fachada estilo azul/gris neoclásico -->
+                  <rect x="48" y="130" width="544" height="216" fill="#7D91A6" stroke="#3B2314" stroke-width="2" />
+                  <rect x="42" y="120" width="556" height="12" fill="#FAF6F0" />
+                  <rect x="48" y="232" width="544" height="8" fill="#FAF6F0" />
+                  <!-- Frontón central y reloj -->
+                  <polygon points="242,120 320,68 398,120" fill="#FAF6F0" stroke="#52321E" stroke-width="2" />
+                  <rect x="282" y="90" width="76" height="30" fill="#7D91A6" stroke="#FAF6F0" stroke-width="2" />
+                  <circle cx="320" cy="105" r="11" fill="#FAF6F0" stroke="#3B2314" stroke-width="2" />
+                  <line x1="320" y1="105" x2="320" y2="98" stroke="#3B2314" stroke-width="1.5" />
+                  <line x1="320" y1="105" x2="326" y2="105" stroke="#3B2314" stroke-width="1.5" />
+                  <!-- Arcos inferiores y ventanales -->
+                  <g fill="#2E3B47">
+                    <path d="M70 346 V270 A14 14 0 0 1 98 270 V346 Z" />
+                    <path d="M112 346 V270 A14 14 0 0 1 140 270 V346 Z" />
+                    <path d="M154 346 V270 A14 14 0 0 1 182 270 V346 Z" />
+                    <path d="M196 346 V270 A14 14 0 0 1 224 270 V346 Z" />
+                    <path d="M238 346 V270 A14 14 0 0 1 266 270 V346 Z" />
+                    <path d="M282 346 V264 A18 18 0 0 1 318 264 V346 Z" />
+                    <path d="M324 346 V264 A18 18 0 0 1 360 264 V346 Z" />
+                    <path d="M374 346 V270 A14 14 0 0 1 402 270 V346 Z" />
+                    <path d="M416 346 V270 A14 14 0 0 1 444 270 V346 Z" />
+                    <path d="M458 346 V270 A14 14 0 0 1 486 270 V346 Z" />
+                    <path d="M500 346 V270 A14 14 0 0 1 528 270 V346 Z" />
+                    <path d="M542 346 V270 A14 14 0 0 1 570 270 V346 Z" />
+                  </g>
+                  <g fill="#FAF6F0" opacity="0.9">
+                    <rect x="74" y="156" width="20" height="58" rx="2" />
+                    <rect x="116" y="156" width="20" height="58" rx="2" />
+                    <rect x="158" y="156" width="20" height="58" rx="2" />
+                    <rect x="200" y="156" width="20" height="58" rx="2" />
+                    <rect x="242" y="156" width="20" height="58" rx="2" />
+                    <rect x="288" y="152" width="24" height="64" rx="12" />
+                    <rect x="330" y="152" width="24" height="64" rx="12" />
+                    <rect x="378" y="156" width="20" height="58" rx="2" />
+                    <rect x="420" y="156" width="20" height="58" rx="2" />
+                    <rect x="462" y="156" width="20" height="58" rx="2" />
+                    <rect x="504" y="156" width="20" height="58" rx="2" />
+                    <rect x="546" y="156" width="20" height="58" rx="2" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Pie de portada + botón rápido de carga -->
+            <div class="mt-2.5 flex items-center justify-between gap-2 text-xs">
+              <span class="font-medium text-roast truncate">Fachada principal • 21 arcos y reloj</span>
+              <label class="edit-control inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-espresso font-semibold cursor-pointer transition shrink-0">
+                <span>📷 Cargar foto de portada</span>
+                <input type="file" accept="image/*" data-photo-slot="portada" class="sr-only" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECCIÓN 2: UN VIAJE POR LA HISTORIA (3 ETAPAS + 2 POSTALES ANTIGUAS)
+         ===================================================================== -->
+    <section id="historia" class="py-12 sm:py-16 px-4 max-w-5xl mx-auto">
+      <div class="text-center mb-7">
+        <span class="inline-block px-3 py-1 rounded-full bg-creamSoft text-coffeeLeaf text-xs font-bold uppercase tracking-wider mb-1.5">
+          Antes y Después
+        </span>
+        <h2 class="font-serif text-2xl sm:text-4xl font-bold text-espresso">
+          📜 Un viaje por la historia
+        </h2>
+      </div>
+
+      <!-- Selector interactivo de 3 etapas -->
+      <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4" role="tablist" aria-label="Etapas históricas">
+        <button type="button" data-stage="etapa1" class="stage-btn p-3 sm:p-4 rounded-2xl text-left border-2 border-terracotta bg-white shadow-sm transition">
+          <span class="block text-[11px] font-bold text-terracotta">Antes de 1904</span>
+          <span class="font-serif font-bold text-xs sm:text-base text-espresso leading-snug block mt-0.5">Casas Reales</span>
+        </button>
+
+        <button type="button" data-stage="etapa2" class="stage-btn p-3 sm:p-4 rounded-2xl text-left border-2 border-transparent bg-creamSoft/80 hover:bg-white transition">
+          <span class="block text-[11px] font-bold text-coffeeLeaf">1904 – 1910</span>
+          <span class="font-serif font-bold text-xs sm:text-base text-espresso leading-snug block mt-0.5">Época Porfirista</span>
+        </button>
+
+        <button type="button" data-stage="etapa3" class="stage-btn p-3 sm:p-4 rounded-2xl text-left border-2 border-transparent bg-creamSoft/80 hover:bg-white transition">
+          <span class="block text-[11px] font-bold text-roast">Remodelación</span>
+          <span class="font-serif font-bold text-xs sm:text-base text-espresso leading-snug block mt-0.5">Estilo Neoclásico</span>
+        </button>
+      </div>
+
+      <!-- Tarjeta limpia con texto breve de la etapa seleccionada -->
+      <div id="stageDisplay" class="bg-white rounded-3xl p-5 sm:p-6 shadow-md border border-espresso/10 mb-8"></div>
+
+      <!-- Comparador / Doble tarjeta visual de Postales Históricas (Foto 1 y Foto 2) -->
+      <div>
+        <h3 class="font-serif text-lg sm:text-xl font-bold text-espresso mb-3 flex items-center gap-2">
+          <span>🕰️ Postales Históricas</span>
+          <span class="text-xs font-sans font-normal text-roast/75">(Toca para ampliar)</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Postal 1: antigua1.jpg -->
+          <article class="bg-white rounded-3xl overflow-hidden shadow-md border border-espresso/10 flex flex-col">
+            <button type="button" data-lightbox-slot="antigua1" class="relative aspect-[16/10] w-full bg-creamSoft overflow-hidden group text-left">
+              <img id="img-antigua1" src="antigua1.jpg" alt="Postal del Parque y Palacio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div id="fallback-antigua1" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#EAE2D6] to-[#D4C5B0]">
+                <span class="text-3xl mb-1">🏞️</span>
+                <span class="text-xs font-bold text-espresso">Postal 1 • antigua1.jpg</span>
+              </div>
+            </button>
+            <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+              <div>
+                <h4 class="font-serif font-bold text-base text-espresso">Postal del Parque y Palacio</h4>
+                <p class="text-xs sm:text-sm text-roast/85 mt-0.5">Vista histórica con el kiosco y las cúpulas originales.</p>
+              </div>
+              <label class="edit-control self-start inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
+                <span>📷 Cargar Postal 1</span>
+                <input type="file" accept="image/*" data-photo-slot="antigua1" class="sr-only" />
+              </label>
+            </div>
+          </article>
+
+          <!-- Postal 2: antigua2.jpg -->
+          <article class="bg-white rounded-3xl overflow-hidden shadow-md border border-espresso/10 flex flex-col">
+            <button type="button" data-lightbox-slot="antigua2" class="relative aspect-[16/10] w-full bg-creamSoft overflow-hidden group text-left">
+              <img id="img-antigua2" src="antigua2.jpg" alt="Palacio y Pico de Orizaba" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div id="fallback-antigua2" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#E5DFD5] to-[#C8BEB0]">
+                <span class="text-3xl mb-1">🏔️</span>
+                <span class="text-xs font-bold text-espresso">Postal 2 • antigua2.jpg</span>
+              </div>
+            </button>
+            <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+              <div>
+                <h4 class="font-serif font-bold text-base text-espresso">Palacio y Pico de Orizaba</h4>
+                <p class="text-xs sm:text-sm text-roast/85 mt-0.5">Panorámica antigua junto al Portal de Zevallos y el volcán.</p>
+              </div>
+              <label class="edit-control self-start inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
+                <span>📷 Cargar Postal 2</span>
+                <input type="file" accept="image/*" data-photo-slot="antigua2" class="sr-only" />
+              </label>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECCIÓN 3: ARQUITECTURA (4 PESTAÑAS BREVES + FOTO 3: fachada.jpg)
+         ===================================================================== -->
+    <section id="arquitectura" class="py-12 sm:py-16 px-4 bg-creamSoft/70 border-y border-espresso/10">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-6">
+          <span class="inline-block px-3 py-1 rounded-full bg-white text-terracotta text-xs font-bold uppercase tracking-wider mb-1.5">
+            Rasgos Clave
+          </span>
+          <h2 class="font-serif text-2xl sm:text-4xl font-bold text-espresso">
+            🏗️ Arquitectura
+          </h2>
+        </div>
+
+        <!-- Pestañas interactivas -->
+        <div class="flex flex-wrap justify-center gap-2 mb-6" role="tablist" aria-label="Detalles arquitectónicos">
+          <button type="button" data-arch="arcos" class="arch-btn px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-espresso text-parchment shadow-sm transition">
+            拱 21 Arcos
+          </button>
+          <button type="button" data-arch="estilo" class="arch-btn px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white text-espresso border border-espresso/15 transition">
+            🏛️ Estilo Neoclásico
+          </button>
+          <button type="button" data-arch="reloj" class="arch-btn px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white text-espresso border border-espresso/15 transition">
+            🕰️ Reloj de París
+          </button>
+          <button type="button" data-arch="salon" class="arch-btn px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-white text-espresso border border-espresso/15 transition">
+            🏅 Cordobeses Ilustres
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          <!-- Tarjeta de contenido de la pestaña -->
+          <div id="archDisplay" class="lg:col-span-6 bg-white rounded-3xl p-6 shadow-md border border-espresso/10 flex flex-col justify-center"></div>
+
+          <!-- Tarjeta visual destacada para Foto 3 (fachada.jpg) -->
+          <div class="lg:col-span-6 bg-white rounded-3xl overflow-hidden shadow-md border border-espresso/10 flex flex-col">
+            <button type="button" data-lightbox-slot="fachada" class="relative aspect-[16/10] w-full bg-creamSoft overflow-hidden group text-left">
+              <img id="img-fachada" src="fachada.jpg" alt="Perspectiva de los 21 arcos y remate neoclásico" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div id="fallback-fachada" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-[#DCE4D8] to-[#B7C7B2]">
+                <span class="text-3xl mb-1">🏛️</span>
+                <span class="text-xs font-bold text-espresso">Foto 3 • fachada.jpg</span>
+              </div>
+            </button>
+            <div class="p-4 flex items-center justify-between gap-2">
+              <p class="text-xs sm:text-sm font-semibold text-espresso">
+                Perspectiva de los 21 arcos y remate neoclásico
+              </p>
+              <label class="edit-control shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
+                <span>📷 Cargar</span>
+                <input type="file" accept="image/*" data-photo-slot="fachada" class="sr-only" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECCIÓN 4: ¿SABÍAS QUÉ…? (3 TARJETAS GIRATORIAS CON DATO EXACTO)
+         ===================================================================== -->
+    <section id="sabias-que" class="py-12 sm:py-16 px-4 max-w-5xl mx-auto">
+      <div class="text-center mb-7">
+        <span class="inline-block px-3 py-1 rounded-full bg-terracotta/20 text-espresso text-xs font-bold uppercase tracking-wider mb-1.5">
+          Toca cada tarjeta
+        </span>
+        <h2 class="font-serif text-2xl sm:text-4xl font-bold text-espresso">
+          💡 ¿Sabías que…?
+        </h2>
+      </div>
+
+      <div id="flipCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- =====================================================================
+         SECCIÓN 5: GALERÍA (4 ESPACIOS CURADOS + LIGHTBOX + CARGA INDIVIDUAL)
+         ===================================================================== -->
+    <section id="galeria" class="py-12 sm:py-16 px-4 bg-creamSoft/70 border-y border-espresso/10">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-7">
+          <span class="inline-block px-3 py-1 rounded-full bg-white text-coffeeLeaf text-xs font-bold uppercase tracking-wider mb-1.5">
+            Exterior e Interior
+          </span>
+          <h2 class="font-serif text-2xl sm:text-4xl font-bold text-espresso">
+            📸 Galería
+          </h2>
+          <p class="text-xs sm:text-sm text-roast/80 mt-1">Toca cualquier imagen para verla en pantalla completa.</p>
+        </div>
+
+        <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECCIÓN 6: PON A PRUEBA TUS CONOCIMIENTOS (TRIVIA DE 4 PREGUNTAS)
+         ===================================================================== -->
+    <section id="trivia" class="py-12 sm:py-16 px-4 max-w-3xl mx-auto">
+      <div class="text-center mb-7">
+        <span class="inline-block px-3 py-1 rounded-full bg-coffeeLeaf/15 text-coffeeLeaf text-xs font-bold uppercase tracking-wider mb-1.5">
+          Mini Reto
+        </span>
+        <h2 class="font-serif text-2xl sm:text-4xl font-bold text-espresso">
+          🧠 Pon a prueba tus conocimientos
+        </h2>
+      </div>
+
+      <div class="bg-white rounded-3xl p-5 sm:p-7 shadow-lg border border-espresso/10">
+        <div class="flex items-center justify-between text-xs font-bold text-roast mb-2">
+          <span id="triviaStep">Pregunta 1 de 4</span>
+          <span id="triviaPoints" class="px-2.5 py-1 rounded-full bg-creamSoft text-espresso">Puntos: 0</span>
+        </div>
+        <div class="w-full h-2 bg-creamSoft rounded-full overflow-hidden mb-5">
+          <div id="triviaBar" class="h-full bg-coffeeLeaf transition-all duration-300 rounded-full" style="width: 25%;"></div>
+        </div>
+
+        <div id="triviaBox"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECCIÓN 7: UN PEDACITO DE CÓRDOBA (DESPEDIDA CÁLIDA)
+         ===================================================================== -->
+    <section id="despedida" class="py-12 sm:py-16 px-4">
+      <div class="max-w-3xl mx-auto bg-gradient-to-br from-espresso via-roast to-[#2B180D] text-parchment rounded-3xl p-7 sm:p-10 text-center shadow-2xl border border-goldWarm/40 space-y-5">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-goldWarm text-xs font-bold">
+          <span>❤️</span>
+          <span>Un pedacito de Córdoba</span>
+        </div>
+
+        <h2 class="font-serif text-2xl sm:text-4xl font-bold leading-snug">
+          ¡Gracias por acompañarnos en este recorrido!
+        </h2>
+
+        <p class="text-parchment/95 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+          Gracias por acompañarnos en este recorrido. Disfruta el aroma de tu velita y el sabor del bombón de café mientras te llevas un pedacito de la historia de Córdoba.
+        </p>
+
+        <div class="pt-1">
+          <button
+            type="button"
+            id="thanksBadgeBtn"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-terracotta hover:bg-goldWarm text-espresso font-bold text-sm sm:text-base shadow-lg transition transform hover:scale-105"
+          >
+            <span>¡Gracias por participar! ☕🕯️</span>
+          </button>
+        </div>
+
+        <p id="thanksFeedback" class="text-xs text-goldWarm font-medium min-h-[1rem]"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-5 px-4 text-center text-xs text-roast/75 border-t border-espresso/10">
+    Palacio Municipal de Córdoba, Veracruz • Exposición Escolar Interactiva
+  </footer>
+
+  <!-- Lightbox para ampliar fotografías -->
+  <div id="lightboxModal" class="fixed inset-0 z-50 hidden bg-espresso/85 backdrop-blur-xs items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+    <div class="bg-parchment text-espresso rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-goldWarm/40">
+      <div class="flex items-center justify-between px-4 py-3 bg-creamSoft border-b border-espresso/10">
+        <h3 id="lightboxTitle" class="font-serif font-bold text-base sm:text-lg truncate pr-2">Fotografía</h3>
+        <button type="button" id="closeLightboxBtn" class="w-8 h-8 rounded-full bg-white hover:bg-espresso hover:text-white font-bold text-sm flex items-center justify-center transition" aria-label="Cerrar">
+          ✕
+        </button>
+      </div>
+      <div class="p-4">
+        <div id="lightboxMedia" class="rounded-2xl overflow-hidden bg-creamSoft flex items-center justify-center max-h-[62vh]"></div>
+        <p id="lightboxDesc" class="mt-3 text-xs sm:text-sm text-roast"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. DATOS EXACTOS DE LOS APUNTES Y CONFIGURACIÓN DE FOTOS
+       ========================================================================= */
+    const STORAGE_KEY = "cordoba_palacio_photos_v1";
+
+    const PHOTO_SLOTS = {
+      portada: {
+        file: "portada.jpg",
+        title: "Fachada principal del Palacio Municipal",
+        desc: "Fachada frontal de día con sus 21 arcos neoclásicos y reloj central."
+      },
+      antigua1: {
+        file: "antigua1.jpg",
+        title: "Postal del Parque y Palacio",
+        desc: "Vista histórica con el kiosco y las cúpulas originales."
+      },
+      antigua2: {
+        file: "antigua2.jpg",
+        title: "Palacio y Pico de Orizaba",
+        desc: "Panorámica antigua junto al Portal de Zevallos y el volcán."
+      },
+      fachada: {
+        file: "fachada.jpg",
+        title: "Fachada y 21 arcos",
+        desc: "Vista lateral de los arcos y detalles neoclásicos."
+      },
+      noche: {
+        file: "noche.jpg",
+        title: "Iluminación nocturna",
+        desc: "Contraste arquitectónico de arcos y frontones de noche."
+      },
+      vitrales: {
+        file: "vitrales.jpg",
+        title: "Vitrales interiores",
+        desc: "Tres vitrales con escudos históricos rodeados de murales."
+      },
+      escalera: {
+        file: "escalera.jpg",
+        title: "Escalinata y murales",
+        desc: "Escalera principal, murales históricos y busto central."
+      }
+    };
+
+    const HISTORY_STAGES = {
+      etapa1: {
+        badge: "Antes de 1904",
+        title: "Antiguas Casas Reales",
+        text: "Antes de existir el Palacio actual, este espacio estuvo ocupado por las antiguas Casas Reales, el edificio de gobierno de la época."
+      },
+      etapa2: {
+        badge: "1904 – 1910",
+        title: "Época Porfirista",
+        text: "Su construcción inició en 1904 y concluyó entre 1905 y 1910, luciendo originalmente llamativas cúpulas en su parte superior."
+      },
+      etapa3: {
+        badge: "Remodelación",
+        title: "Estilo Neoclásico",
+        text: "En una remodelación posterior se sustituyeron las cúpulas de zinc anteriores para darle su actual remate de línea neoclásica."
+      }
+    };
+
+    const ARCH_TABS = {
+      arcos: {
+        icon: "拱",
+        title: "Los 21 Arcos",
+        text: "Su fachada cuenta con 21 arcos en conmemoración de la heroica batalla del 21 de mayo de 1821, origen del título «Córdoba Heroica»."
+      },
+      estilo: {
+        icon: "🏛️",
+        title: "Estilo Neoclásico",
+        text: "Obra de corte neoclásico con estilo toscano florentino e influencia francesa, destacada por su simetría y elegancia."
+      },
+      reloj: {
+        icon: "🕰️",
+        title: "Reloj de París (1904)",
+        text: "Dispone de un reloj histórico traído desde París, Francia, en 1904 por Porfirio Díaz."
+      },
+      salon: {
+        icon: "🏅",
+        title: "Salón de Cordobeses Ilustres",
+        text: "Recinto cívico en su interior donde se encuentran inscritos en letras de oro personajes y hechos destacados de la región."
+      }
+    };
+
+    const CURIOSITIES = [
+      {
+        front: "🔐 El «Código Córdoba»",
+        back: "Mensaje oculto en su fachada: 1000 (base), 8 ventanas con triángulo y semicírculo (800), 21 ventanas (1821, mayo) y 16 arcos (16 de septiembre)."
+      },
+      {
+        front: "📚 Tesoro documental",
+        back: "En su interior resguarda uno de los archivos municipales mejor conservados de todo México."
+      },
+      {
+        front: "🏛️ Corazón cívico y cultural",
+        back: "Además de trámites, cabildo y alcaldía, alberga murales históricos y espacios culturales abiertos al público."
+      }
+    ];
+
+    const GALLERY_ITEMS = [
+      { slot: "fachada", title: "Fachada y 21 arcos", desc: "Vista lateral de los arcos y detalles neoclásicos.", emoji: "🏛️" },
+      { slot: "noche", title: "Iluminación nocturna", desc: "Contraste arquitectónico de arcos y frontones de noche.", emoji: "🌙" },
+      { slot: "vitrales", title: "Vitrales interiores", desc: "Tres vitrales con escudos históricos rodeados de murales.", emoji: "🪟" },
+      { slot: "escalera", title: "Escalinata y murales", desc: "Escalera principal, murales históricos y busto central.", emoji: "🎨" }
+    ];
+
+    const TRIVIA = [
+      {
+        q: "1. ¿Qué edificio existía antes en el lugar del Palacio Municipal?",
+        options: [
+          "Antiguas Casas Reales",
+          "Un cuartel militar",
+          "Una hacienda cafetalera"
+        ],
+        answer: 0,
+        note: "¡Correcto! Antes se ubicaban ahí las antiguas Casas Reales, el edificio de gobierno."
+      },
+      {
+        q: "2. ¿Qué simbolizan los 21 arcos de su fachada?",
+        options: [
+          "Los 21 años que tardó en construirse",
+          "La batalla del 21 de mayo de 1821",
+          "Los 21 municipios vecinos"
+        ],
+        answer: 1,
+        note: "¡Exacto! Conmemoran la heroica batalla del 21 de mayo de 1821 («Córdoba Heroica»)."
+      },
+      {
+        q: "3. ¿De dónde y en qué año se trajo su reloj histórico?",
+        options: [
+          "De Londres en 1910",
+          "De Madrid en 1821",
+          "De París, Francia, en 1904"
+        ],
+        answer: 2,
+        note: "¡Muy bien! Fue traído desde París, Francia, en 1904 por Porfirio Díaz."
+      },
+      {
+        q: "4. En el «Código Córdoba» de la fachada, ¿qué representan las 8 ventanas con triángulo y semicírculo?",
+        options: [
+          "El número 800",
+          "Los 8 barrios antiguos",
+          "El mes de agosto"
+        ],
+        answer: 0,
+        note: "¡Así es! Junto con la base 1000 forman el año 1800, complementado por el 21 y el 16."
+      }
+    ];
+
+    /* =========================================================================
+       2. GESTIÓN DE FOTOS (LOCALES O SUBIDAS EN LOCALSTORAGE + MODO EDICIÓN)
+       ========================================================================= */
+    let savedPhotos = {};
+    try {
+      savedPhotos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    } catch (_) {
+      savedPhotos = {};
+    }
+
+    function applyPhotoToSlot(slotKey) {
+      const imgEl = document.getElementById(`img-${slotKey}`);
+      const fallbackEl = document.getElementById(`fallback-${slotKey}`);
+      if (!imgEl || !fallbackEl) return;
+
+      const customDataUrl = savedPhotos[slotKey];
+      const defaultFile = PHOTO_SLOTS[slotKey]?.file;
+
+      imgEl.onload = () => {
+        imgEl.classList.remove("hidden");
+        fallbackEl.classList.add("hidden");
+      };
+
+      imgEl.onerror = () => {
+        imgEl.classList.add("hidden");
+        fallbackEl.classList.remove("hidden");
+      };
+
+      imgEl.src = customDataUrl || defaultFile;
+    }
+
+    function bindAllPhotoUploads() {
+      document.querySelectorAll("input[data-photo-slot]").forEach((input) => {
+        input.addEventListener("change", (event) => {
+          const file = event.target.files?.[0];
+          const slot = input.dataset.photoSlot;
+          if (!file || !slot) return;
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (typeof e.target?.result === "string") {
+              savedPhotos[slot] = e.target.result;
+              try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(savedPhotos));
+              } catch (_) {
+                // Si la imagen es muy pesada para localStorage, se mantiene visible en esta sesión
+              }
+              applyPhotoToSlot(slot);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    }
+
+    // Modo Edición de Fotos (permite ocultar botones de carga durante la exposición)
+    let editModeActive = true;
+    function setEditMode(active) {
+      editModeActive = active;
+      const btn = document.getElementById("toggleEditModeBtn");
+      const label = document.getElementById("editModeLabel");
+      if (btn) {
+        btn.setAttribute("aria-pressed", String(active));
+        btn.classList.toggle("bg-terracotta/25", active);
+        btn.classList.toggle("border-terracotta", active);
+      }
+      if (label) {
+        label.textContent = active ? "Edición: ON" : "Editar fotos";
+      }
+      document.querySelectorAll(".edit-control").forEach((el) => {
+        el.classList.toggle("hidden", !active);
+      });
+    }
+
+    /* =========================================================================
+       3. RENDER DE SECCIONES INTERACTIVAS
+       ========================================================================= */
+    function renderStage(stageKey) {
+      const data = HISTORY_STAGES[stageKey];
+      const box = document.getElementById("stageDisplay");
+      if (!data || !box) return;
+
+      box.innerHTML = `
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-terracotta/20 text-espresso text-xs font-bold mb-2">
+          ${data.badge}
+        </span>
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-espresso">${data.title}</h3>
+        <p class="text-sm sm:text-base text-roast mt-2 leading-relaxed">${data.text}</p>
+      `;
+
+      document.querySelectorAll(".stage-btn").forEach((btn) => {
+        const active = btn.dataset.stage === stageKey;
+        btn.classList.toggle("border-terracotta", active);
+        btn.classList.toggle("bg-white", active);
+        btn.classList.toggle("shadow-sm", active);
+        btn.classList.toggle("border-transparent", !active);
+        btn.classList.toggle("bg-creamSoft/80", !active);
+      });
+    }
+
+    function renderArch(archKey) {
+      const data = ARCH_TABS[archKey];
+      const box = document.getElementById("archDisplay");
+      if (!data || !box) return;
+
+      box.innerHTML = `
+        <div class="w-12 h-12 rounded-2xl bg-espresso text-goldWarm flex items-center justify-center text-2xl mb-3 shadow-xs">
+          ${data.icon}
+        </div>
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-espresso">${data.title}</h3>
+        <p class="text-sm sm:text-base text-roast mt-2 leading-relaxed">${data.text}</p>
+      `;
+
+      document.querySelectorAll(".arch-btn").forEach((btn) => {
+        const active = btn.dataset.arch === archKey;
+        btn.classList.toggle("bg-espresso", active);
+        btn.classList.toggle("text-parchment", active);
+        btn.classList.toggle("bg-white", !active);
+        btn.classList.toggle("text-espresso", !active);
+      });
+    }
+
+    function renderFlipCards() {
+      const container = document.getElementById("flipCardsContainer");
+      if (!container) return;
+
+      container.innerHTML = CURIOSITIES.map((item, idx) => `
+        <div class="perspective-1000 h-56">
+          <button
+            type="button"
+            class="flip-trigger relative w-full h-full text-left transform-style-3d cursor-pointer rounded-3xl focus:outline-none"
+            aria-label="Tarjeta ${idx + 1}: ${item.front}. Toca para girar"
+          >
+            <!-- Frente -->
+            <div class="backface-hidden absolute inset-0 rounded-3xl bg-white p-5 shadow-md border-2 border-espresso/10 hover:border-terracotta flex flex-col justify-between transition">
+              <span class="text-xs font-bold uppercase tracking-wider text-coffeeLeaf">Dato #${idx + 1}</span>
+              <p class="font-serif font-bold text-xl text-espresso leading-snug">${item.front}</p>
+              <span class="text-xs font-semibold text-terracotta">Toca para descubrir →</span>
+            </div>
+
+            <!-- Reverso -->
+            <div class="backface-hidden rotate-y-180 absolute inset-0 rounded-3xl bg-gradient-to-br from-espresso to-roast text-parchment p-5 shadow-xl border-2 border-goldWarm flex flex-col justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-goldWarm">¿Sabías que…?</span>
+              <p class="text-xs sm:text-sm leading-relaxed text-parchment/95">${item.back}</p>
+              <span class="text-[11px] text-goldWarm/90">Toca para volver</span>
+            </div>
+          </button>
+        </div>
+      `).join("");
+
+      container.querySelectorAll(".flip-trigger").forEach((card) => {
+        card.addEventListener("click", () => {
+          card.classList.toggle("rotate-y-180");
+        });
+      });
+    }
+
+    function renderGallery() {
+      const grid = document.getElementById("galleryGrid");
+      if (!grid) return;
+
+      grid.innerHTML = GALLERY_ITEMS.map((item) => `
+        <article class="bg-white rounded-3xl overflow-hidden shadow-md border border-espresso/10 flex flex-col">
+          <button type="button" data-lightbox-slot="${item.slot}" class="relative aspect-[16/10] w-full bg-creamSoft overflow-hidden group text-left">
+            <img id="img-${item.slot}" src="${PHOTO_SLOTS[item.slot].file}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div id="fallback-${item.slot}" class="hidden w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-creamSoft to-[#E3D5C1]">
+              <span class="text-3xl mb-1">${item.emoji}</span>
+              <span class="text-xs font-bold text-espresso">${PHOTO_SLOTS[item.slot].file}</span>
+            </div>
+          </button>
+
+          <div class="p-4 flex-1 flex flex-col justify-between gap-2.5">
+            <div>
+              <h3 class="font-serif font-bold text-base text-espresso">${item.title}</h3>
+              <p class="text-xs sm:text-sm text-roast/85 mt-0.5">${item.desc}</p>
+            </div>
+            <div class="flex items-center justify-between gap-2 pt-1">
+              <button type="button" data-lightbox-slot="${item.slot}" class="text-xs font-bold text-coffeeLeaf hover:underline">
+                Ampliar vista
+              </button>
+              <label class="edit-control inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-creamSoft hover:bg-terracotta/25 text-xs font-semibold cursor-pointer transition">
+                <span>📷 Cargar foto</span>
+                <input type="file" accept="image/*" data-photo-slot="${item.slot}" class="sr-only" />
+              </label>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    /* =========================================================================
+       4. LIGHTBOX PARA FOTOS
+       ========================================================================= */
+    function openLightbox(slotKey) {
+      const info = PHOTO_SLOTS[slotKey];
+      const modal = document.getElementById("lightboxModal");
+      const title = document.getElementById("lightboxTitle");
+      const desc = document.getElementById("lightboxDesc");
+      const media = document.getElementById("lightboxMedia");
+      if (!info || !modal) return;
+
+      title.textContent = info.title;
+      desc.textContent = info.desc;
+
+      const src = savedPhotos[slotKey] || info.file;
+      media.innerHTML = `
+        <img
+          src="${src}"
+          alt="${info.title}"
+          onerror="this.parentElement.innerHTML='<div class=\\'py-14 px-6 text-center\\'><p class=\\'font-serif font-bold text-lg text-espresso\\'>${info.title}</p><p class=\\'text-xs text-roast mt-1\\'>Carga la imagen <strong>${info.file}</strong> usando el botón de edición.</p></div>'"
+          class="w-full max-h-[58vh] object-contain"
+        />
+      `;
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById("lightboxModal");
+      if (!modal) return;
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    /* =========================================================================
+       5. TRIVIA INTERACTIVA
+       ========================================================================= */
+    let triviaIndex = 0;
+    let triviaScore = 0;
+    let locked = false;
+
+    function renderTrivia() {
+      const box = document.getElementById("triviaBox");
+      const stepEl = document.getElementById("triviaStep");
+      const pointsEl = document.getElementById("triviaPoints");
+      const barEl = document.getElementById("triviaBar");
+      if (!box) return;
+
+      pointsEl.textContent = `Puntos: ${triviaScore} / ${TRIVIA.length}`;
+
+      if (triviaIndex >= TRIVIA.length) {
+        stepEl.textContent = "¡Completada!";
+        barEl.style.width = "100%";
+
+        const msg = triviaScore === TRIVIA.length
+          ? "¡Puntaje perfecto! Ya dominas la historia del Palacio Municipal de Córdoba."
+          : triviaScore >= 2
+          ? "¡Muy bien! Conoces los datos clave de nuestra exposición."
+          : "¡Buen intento! Repasa las tarjetas de arriba y vuelve a intentarlo.";
+
+        box.innerHTML = `
+          <div class="text-center py-4 space-y-4">
+            <div class="text-4xl">${triviaScore >= 3 ? "🏆" : "☕"}</div>
+            <h3 class="font-serif text-2xl font-bold text-espresso">
+              Obtuviste ${triviaScore} de ${TRIVIA.length} aciertos
+            </h3>
+            <p class="text-sm text-roast max-w-md mx-auto">${msg}</p>
+            <button type="button" id="retryTriviaBtn" class="px-6 py-3 rounded-2xl bg-espresso hover:bg-roast text-parchment font-bold text-sm shadow-md transition">
+              🔄 Jugar otra vez
+            </button>
+          </div>
+        `;
+
+        document.getElementById("retryTriviaBtn")?.addEventListener("click", () => {
+          triviaIndex = 0;
+          triviaScore = 0;
+          locked = false;
+          renderTrivia();
+        });
+
+        if (triviaScore >= 3) triggerConfetti();
+        return;
+      }
+
+      locked = false;
+      const item = TRIVIA[triviaIndex];
+      stepEl.textContent = `Pregunta ${triviaIndex + 1} de ${TRIVIA.length}`;
+      barEl.style.width = `${((triviaIndex + 1) / TRIVIA.length) * 100}%`;
+
+      box.innerHTML = `
+        <div class="space-y-4">
+          <h3 class="font-serif text-lg sm:text-xl font-bold text-espresso leading-snug">${item.q}</h3>
+          <div class="space-y-2.5">
+            ${item.options.map((opt, idx) => `
+              <button
+                type="button"
+                data-opt="${idx}"
+                class="opt-btn w-full text-left px-4 py-3 rounded-2xl border-2 border-espresso/15 bg-parchment/60 hover:bg-creamSoft font-medium text-sm text-espresso transition flex items-center justify-between gap-2"
+              >
+                <span>${opt}</span>
+                <span class="opt-tag text-[11px] font-bold text-roast/60">Elegir</span>
+              </button>
+            `).join("")}
+          </div>
+          <div id="triviaNote" class="hidden rounded-2xl p-3.5 text-xs sm:text-sm"></div>
+          <div class="flex justify-end">
+            <button type="button" id="nextQBtn" class="hidden px-5 py-2.5 rounded-2xl bg-coffeeLeaf hover:bg-espresso text-white font-bold text-xs sm:text-sm transition">
+              ${triviaIndex + 1 === TRIVIA.length ? "Ver marcador final →" : "Siguiente →"}
+            </button>
+          </div>
+        </div>
+      `;
+
+      box.querySelectorAll(".opt-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (locked) return;
+          locked = true;
+
+          const picked = Number(btn.dataset.opt);
+          const correct = picked === item.answer;
+          if (correct) {
+            triviaScore += 1;
+            pointsEl.textContent = `Puntos: ${triviaScore} / ${TRIVIA.length}`;
+          }
+
+          box.querySelectorAll(".opt-btn").forEach((b, i) => {
+            b.disabled = true;
+            const tag = b.querySelector(".opt-tag");
+            if (i === item.answer) {
+              b.classList.remove("border-espresso/15", "bg-parchment/60");
+              b.classList.add("border-coffeeLeaf", "bg-emerald-50", "text-emerald-950");
+              if (tag) tag.textContent = "✓ Correcta";
+            } else if (i === picked && !correct) {
+              b.classList.remove("border-espresso/15", "bg-parchment/60");
+              b.classList.add("border-terracotta", "bg-amber-50", "text-amber-950");
+              if (tag) tag.textContent = "✕ Elegida";
+            }
+          });
+
+          const noteEl = document.getElementById("triviaNote");
+          noteEl.classList.remove("hidden");
+          noteEl.className = correct
+            ? "rounded-2xl p-3.5 text-xs sm:text-sm bg-emerald-50 border border-emerald-200 text-emerald-950"
+            : "rounded-2xl p-3.5 text-xs sm:text-sm bg-amber-50 border border-amber-300 text-amber-950";
+          noteEl.textContent = item.note;
+
+          const nextBtn = document.getElementById("nextQBtn");
+          nextBtn.classList.remove("hidden");
+          nextBtn.addEventListener("click", () => {
+            triviaIndex += 1;
+            renderTrivia();
+          });
+        });
+      });
+    }
+
+    function triggerConfetti() {
+      const palette = ["#C68B59", "#DFB17B", "#2E4A3E", "#3B2314"];
+      for (let i = 0; i < 30; i++) {
+        const dot = document.createElement("div");
+        dot.className = "confetti-dot";
+        dot.style.left = `${Math.random() * 100}vw`;
+        dot.style.backgroundColor = palette[i % palette.length];
+        dot.style.animationDuration = `${1.6 + Math.random() * 1.4}s`;
+        document.body.appendChild(dot);
+        dot.addEventListener("animationend", () => dot.remove());
+      }
+    }
+
+    /* =========================================================================
+       6. INICIALIZACIÓN GENERAL
+       ========================================================================= */
+    document.addEventListener("DOMContentLoaded", () => {
+      // Historia
+      renderStage("etapa1");
+      document.querySelectorAll(".stage-btn").forEach((btn) => {
+        btn.addEventListener("click", () => renderStage(btn.dataset.stage));
+      });
+
+      // Arquitectura
+      renderArch("arcos");
+      document.querySelectorAll(".arch-btn").forEach((btn) => {
+        btn.addEventListener("click", () => renderArch(btn.dataset.arch));
+      });
+
+      // ¿Sabías que…?
+      renderFlipCards();
+
+      // Galería
+      renderGallery();
+
+      // Cargar fotos en los 7 espacios
+      Object.keys(PHOTO_SLOTS).forEach((slot) => applyPhotoToSlot(slot));
+      bindAllPhotoUploads();
+
+      // Botón Modo Edición de Fotos
+      setEditMode(true);
+      document.getElementById("toggleEditModeBtn")?.addEventListener("click", () => {
+        setEditMode(!editModeActive);
+      });
+
+      // Lightbox
+      document.querySelectorAll("[data-lightbox-slot]").forEach((el) => {
+        el.addEventListener("click", () => openLightbox(el.dataset.lightboxSlot));
+      });
+      document.getElementById("closeLightboxBtn")?.addEventListener("click", closeLightbox);
+      document.getElementById("lightboxModal")?.addEventListener("click", (e) => {
+        if (e.target.id === "lightboxModal") closeLightbox();
+      });
+
+      // Trivia
+      renderTrivia();
+
+      // Despedida
+      document.getElementById("thanksBadgeBtn")?.addEventListener("click", () => {
+        const fb = document.getElementById("thanksFeedback");
+        if (fb) fb.textContent = "¡Un brindis con café por Córdoba! Gracias por visitarnos.";
+        triggerConfetti();
+      });
+    });
+  </script>
+</body>
+</html>
